@@ -32,15 +32,15 @@ public class PetStore {
 	private Long petStoreId; // Unique identifier for a pet store
 	private String petStoreName; // Name of the pet store
 	private String petStoreAddress; // Address of the pet store
-	private String petstoreCity; // City where the pet store is located
+	private String petStoreCity; // City where the pet store is located
 	private String petStoreState; // State where the pet store is located
 	private String petStoreZip; // ZIP code of the pet store
 	private String petStorePhone; // Contact phone number of the pet store
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	 // Defines a many-to-many relationship with the Customer entity.
-	 // CascadeType.PERSIST ensures that when a PetStore is persisted, its associated
-	 // Customers are also persisted.
+	// Defines a many-to-many relationship with the Customer entity.
+	// CascadeType.PERSIST ensures that when a PetStore is persisted, its associated
+	// Customers are also persisted.
 
 	@JoinTable(name = "pet_store_customer", // Name of the join table for the many-to-many relationship
 			joinColumns = @JoinColumn(name = "pet_store_id"), // Foreign key column for PetStore in the join table
@@ -52,14 +52,14 @@ public class PetStore {
 	private Set<Customer> customers = new HashSet<>(); // Initializes the Set to prevent NullPointerException issues
 
 	@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL, orphanRemoval = true)
-	
-	 // Defines a one-to-many relationship with the Employee entity. -
-	 // "mappedBy = 'petStore'" means this field is mapped by the "petStore" field in
-	 // the Employee class. - CascadeType.ALL ensures that all operations (persist,
-	 // merge, remove, refresh, detach) are cascaded to Employees. - orphanRemoval =
-	 // true means if an Employee is removed from this set, it is deleted from the
-	 // database.
-	 
+
+	// Defines a one-to-many relationship with the Employee entity. -
+	// "mappedBy = 'petStore'" means this field is mapped by the "petStore" field in
+	// the Employee class. - CascadeType.ALL ensures that all operations (persist,
+	// merge, remove, refresh, detach) are cascaded to Employees. - orphanRemoval =
+	// true means if an Employee is removed from this set, it is deleted from the
+	// database.
+
 	@EqualsAndHashCode.Exclude // Excludes this field from equals() and hashCode() methods to prevent infinite
 								// loops
 	@ToString.Exclude // Excludes this field from the toString() method to avoid circular references
