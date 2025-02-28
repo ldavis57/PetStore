@@ -14,6 +14,7 @@ spring:
                         # - `validate` (Checks schema without making changes)
                         # - `none` (Disables schema generation)
     show-sql: true  # Enables SQL query logging in the console for debugging
+    defer-datasource-initialization: true
 
   sql:
     init:

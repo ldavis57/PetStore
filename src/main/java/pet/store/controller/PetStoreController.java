@@ -24,6 +24,7 @@ public class PetStoreController {
 	@Autowired
 	private PetStoreService petStoreService;
 
+	// HTTP POST (CREATE)
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public PetStoreData insertPetStore(@RequestBody PetStoreData petStoreData) {
@@ -31,24 +32,26 @@ public class PetStoreController {
 		return petStoreService.savePetStore(petStoreData);
 	}
 
-	@PutMapping("/{petStoreId}")
+	// PUT (UPDATE) by ID
+	@PutMapping("/pet_store/{petStoreId}")
 	public PetStoreData updatePetStore(@PathVariable Long petStoreId, @RequestBody PetStoreData petStoreData) {
 		petStoreData.setPetStoreId(petStoreId);
-		log.info("Updating pet store{}", petStoreData);
+		log.info("Updating pet store with ID: {}", petStoreData);
 		return petStoreService.savePetStore(petStoreData);
 	}
-	
+
+	// HTTP GET (RETRIEVE)
 	@GetMapping("/pet_store")
 	public List<PetStoreData> retrieveAllStores() {
 		log.info("Retrieving all pet stores.");
 		return petStoreService.retrieveAllPetStores();
-	
+
 	}
-	
-	@GetMapping("/{petStoreId}")
-	public List<PetStoreData> retrievePetStoreById(@PathVariable Long petStoreId) {
-				log.info("Retrieveing all pet stores with ID={}", petStoreId);
-		return PetStoreService.retrievePetStoreById(petStoreId);
-	
+
+	// HTTP GET (RETRIEVE) by ID
+	@GetMapping("/pet_store/{petStoreId}")
+	public PetStoreData retrievePetStoreById(@PathVariable Long petStoreId) {
+		log.info("Retrieveing pet store with ID={}", petStoreId);
+		return petStoreService.retrievePetStoreById(petStoreId);
 	}
 }
