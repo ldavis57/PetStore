@@ -1,7 +1,7 @@
 ﻿# Pet Store project
 <div align="center">
 
-  <img src="Readme_Logo.png" alt="logo" width="200" height="auto" />
+  <img src="/src/main/resources/Readme_Logo.png" alt="logo" width="200" height="auto" />
   <h1>Pet Store Project</h1>
   
   <p>
