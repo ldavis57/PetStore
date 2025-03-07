@@ -6,11 +6,19 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import pet.store.controller.model.PetStoreData;
+import pet.store.controller.model.PetStoreData.PetStoreCustomer;
+import pet.store.controller.model.PetStoreData.PetStoreEmployee;
+import pet.store.dao.CustomerDao;
+import pet.store.dao.EmployeeDao;
 import pet.store.dao.PetStoreDao;
+import pet.store.entity.Customer;
+import pet.store.entity.Employee;
 import pet.store.entity.PetStore;
 
 /**
@@ -22,6 +30,12 @@ public class PetStoreService {
 
 	@Autowired // Injects the PetStoreDao dependency
 	private PetStoreDao petStoreDao;
+
+	@Autowired // Injects the PetStoreDao dependency
+	private EmployeeDao employeeDao;
+
+	@Autowired // Injects the PetStoreDao dependency
+	private CustomerDao customerDao;
 
 	/**
 	 * Saves or updates a pet store record. Used by both POST (create) and PUT
@@ -55,6 +69,21 @@ public class PetStoreService {
 		petStore.setPetStoreZip(petStoreData.getPetStoreZip());
 	}
 
+	private void copyEmployeeFields(Employee employee, PetStoreEmployee petStoreEmployee) {
+		employee.setEmployeeId(petStoreEmployee.getEmployeeId());
+		employee.setEmployeeFirstName(petStoreEmployee.getEmployeeFirstName());
+		employee.setEmployeeLastName(petStoreEmployee.getEmployeeLastName());
+		employee.setEmployeeJobTitle(petStoreEmployee.getEmployeeJobTitLe());
+		employee.setEmployeePhone(petStoreEmployee.getEmployeePhone());
+	}
+
+	private void copyCustomerFields(Customer customer, PetStoreCustomer petStoreCustomer) {
+		customer.setCustomerId(petStoreCustomer.getCustomerId());
+		customer.setCustomerFirstName(petStoreCustomer.getCustomerFirstName()); // Stores the customer's first name
+		customer.setCustomerLastName(petStoreCustomer.getCustomerLastName()); // Stores the customer's last name
+		customer.setCustomerEmail(petStoreCustomer.getCustomerEmail()); // Stores the customer's email address
+	}
+
 	/**
 	 * Finds an existing pet store by ID or creates a new instance if ID is null.
 	 * 
@@ -69,16 +98,54 @@ public class PetStoreService {
 		}
 	}
 
-	/**
-	 * Finds a pet store by its ID, throwing an exception if not found.
-	 * 
-	 * @param petStoreId The ID of the pet store.
-	 * @return The found PetStore entity.
-	 * @throws NoSuchElementException if the pet store is not found.
-	 */
+	private Employee findOrCreateEmployee(Long petStoreId, Long employeeId) {
+		if (Objects.isNull(employeeId)) {
+			return new Employee();
+		}
+		return findEmployeeById(petStoreId, employeeId);
+	}
+
+	private Customer findOrCreateCustomer(Long petStoreId, Long customerId) {
+		if (Objects.isNull(customerId)) {
+			return new Customer();
+		}
+		return findCustomerById(petStoreId, customerId);
+	}
+
+	private Employee findEmployeeById(Long petStoreId, Long employeeId) {
+		Employee employee = employeeDao.findById(employeeId)
+				.orElseThrow(() -> new NoSuchElementException("Employee with ID+" + employeeId + " was not found."));
+
+		if (employee.getPetStore().getPetStoreId() != petStoreId) {
+			throw new IllegalArgumentException("The employee with ID=" + employeeId
+					+ " is not employed by the pet store with ID=" + petStoreId + ".");
+		}
+		return employee;
+	}
+
 	private PetStore findPetStoreById(Long petStoreId) {
 		return petStoreDao.findById(petStoreId)
 				.orElseThrow(() -> new NoSuchElementException("Pet store with ID=" + petStoreId + " was not found."));
+	}
+
+	private Customer findCustomerById(Long petStoreId, Long customerId) {
+		Customer customer = customerDao.findById(customerId)
+				.orElseThrow(() -> new NoSuchElementException("Customer with ID+" + customerId + " was not found."));
+
+		boolean found = false;
+
+		for (PetStore petStore : customer.getPetStores()) {
+			if (petStore.getPetStoreId().equals(petStoreId)) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			throw new IllegalArgumentException(
+					"The customer with ID=" + customerId + " is not a member of the pet store with ID=" + petStoreId);
+		}
+
+		return customer;
 	}
 
 	/**
@@ -116,5 +183,37 @@ public class PetStoreService {
 	 */
 	public void deletePetStore(Long petStoreId) {
 		petStoreDao.deleteById(petStoreId);
+	}
+
+	@Transactional(readOnly = false)
+	public PetStoreEmployee saveEmployee(Long petStoreId, PetStoreEmployee petStoreEmployee) {
+	    try {
+	        PetStore petStore = findPetStoreById(petStoreId);
+	        Long employeeId = petStoreEmployee.getEmployeeId();
+	        Employee employee = findOrCreateEmployee(petStoreId, employeeId);
+
+	        copyEmployeeFields(employee, petStoreEmployee);
+	        employee.setPetStore(petStore);
+	        petStore.getEmployees().add(employee);
+
+	        Employee dbEmployee = employeeDao.save(employee);
+	        return new PetStoreEmployee(dbEmployee);
+	    } catch (NoSuchElementException e) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet store not found with ID=" + petStoreId, e);
+	    }
+	}
+	@Transactional
+	public PetStoreCustomer saveCustomer(Long petStoreId, PetStoreCustomer petStoreCustomer) {
+		PetStore petStore = findPetStoreById(petStoreId);
+		Long customerId = petStoreCustomer.getCustomerId();
+		Customer customer = findOrCreateCustomer(petStoreId, customerId);
+
+		copyCustomerFields(customer, petStoreCustomer);
+
+		customer.getPetStores().add(petStore);
+		petStore.getCustomers().add(customer);
+
+		Customer dbCustomer = customerDao.save(customer);
+		return new PetStoreCustomer(dbCustomer);
 	}
 }

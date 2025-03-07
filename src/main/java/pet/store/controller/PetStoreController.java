@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import pet.store.controller.model.PetStoreData;
+import pet.store.controller.model.PetStoreData.PetStoreCustomer;
+import pet.store.controller.model.PetStoreData.PetStoreEmployee;
 import pet.store.service.PetStoreService;
 
 /**
@@ -23,7 +25,7 @@ import pet.store.service.PetStoreService;
  * update, and retrieve pet store data.
  */
 @RestController
-@RequestMapping("/pet_store") // Base path for all endpoints
+@RequestMapping("/pet_store") // specifies all calls start with pet_store
 @Slf4j // Enables logging using Lombok
 public class PetStoreController {
 
@@ -36,12 +38,22 @@ public class PetStoreController {
 	 * @param petStoreData The pet store details received in the request body.
 	 * @return The saved pet store data.
 	 */
-	@PostMapping("/pet_store")
+	@PostMapping("/{petStoreId}/employee")
 	@ResponseStatus(code = HttpStatus.CREATED) // Returns HTTP 201 Created on success
-	public PetStoreData insertPetStore(@RequestBody PetStoreData petStoreData) {
-		log.info("Creating pet store { } ", petStoreData);
-		return petStoreService.savePetStore(petStoreData);
+	public PetStoreEmployee addEmployeeToPetStore(@PathVariable Long petStoreId,
+			@RequestBody PetStoreEmployee petStoreEmployee) { // @RequestBody: body is json
+		log.info("Adding employee {} to pet store with ID={}", petStoreEmployee, petStoreId);
+		return petStoreService.saveEmployee(petStoreId, petStoreEmployee);
 	}
+
+	@PostMapping("/{petStoreId}/customer")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public PetStoreCustomer addCustomerToPetStore(@PathVariable Long petStoreId,
+			@RequestBody PetStoreCustomer petStoreCustomer) {
+		log.info("Adding customer {} to pet store with ID={}", petStoreCustomer, petStoreId);
+		return petStoreService.saveCustomer(petStoreId, petStoreCustomer);
+	}
+
 
 	/**
 	 * Updates an existing pet store by ID.
@@ -61,10 +73,12 @@ public class PetStoreController {
 	 * Retrieves all pet stores.
 	 * 
 	 * @return A list of all stored pet stores.
+	 * 
+	 *         RETRIEVE
 	 */
-	@GetMapping("/pet_store")
-	public List<PetStoreData> retrieveAllStores() {
-		log.info("Retrieving all pet stores.");
+	@GetMapping
+	public List<PetStoreData> retrieveAllPetStores() {
+		log.info("Retrieving all pet stores");
 		return petStoreService.retrieveAllPetStores();
 	}
 
@@ -74,12 +88,12 @@ public class PetStoreController {
 	 * @param petStoreId The ID of the pet store to retrieve.
 	 * @return The pet store data if found.
 	 */
-	@GetMapping("/pet_store/{petStoreId}")
+	@GetMapping("/{petStoreId}")
 	public PetStoreData retrievePetStoreById(@PathVariable Long petStoreId) {
 		log.info("Retrieving pet store with ID={}", petStoreId);
 		return petStoreService.retrievePetStoreById(petStoreId);
 	}
-	
+
 	/**
 	 * Deletes a specific pet store by its ID.
 	 * 

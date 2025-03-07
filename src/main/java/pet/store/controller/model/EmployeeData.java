@@ -1,11 +1,7 @@
 package pet.store.controller.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pet.store.entity.Customer;
 import pet.store.entity.Employee;
 import pet.store.entity.PetStore;
 
@@ -22,9 +18,11 @@ public class EmployeeData {
 	private String employeeLastName;
 	private String employeePhone;
 	private String employeeJobTitle;
-	//private Long petStoreId;
-	// private Set<PetStoreEmployee> petStore = new HashSet<>();
-	private PetStoreEmployee petStore; // Represents the pet store the employee
+	//private Set<PetStoreEmployee> petStore = new HashSet<>();
+	private PetStoreEmployee petStore;
+	
+	
+	//private PetStoreEmployee petStore; // Represents the pet store the employee
 	// works at
 
 	/**
@@ -39,22 +37,20 @@ public class EmployeeData {
 		employeeLastName = employee.getEmployeeLastName();
 		employeePhone = employee.getEmployeePhone();
 		employeeJobTitle = employee.getEmployeeJobTitle();
+		
+			    // Check if the method returns a collection
+	    if (employee.getPetStore() != null) { 
+            petStore = new PetStoreEmployee(employee.getPetStore()); 
+	    }
+	}
 
-		// Include pet store details as a summary DTO (avoiding full PetStore object)
-		if (employee.getPetStore() != null) {
-			this.petStore = new PetStoreEmployee(employee.getPetStore());
-		}
 
 		// Converts associated Customer entities to DTO representations
 //		for (Customer customer : employee.getPetStore()) {
 //			customers.add(new employeeCustomer(customer));
 //		}
 
-		// Converts associated Employee entities to DTO representations
-//		for (PetStore petStore : employee.getPetStore() {
-//			employees.add(new PetStoreEmployee(employee));
-//		}
-	}
+	
 
 	/**
 	 * DTO for Customer entity associated with a employee.

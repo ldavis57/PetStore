@@ -15,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import pet.store.controller.model.EmployeeData.PetStoreEmployee;
 
 /**
  * Represents a PetStore entity in the pet store system. This class is mapped to
@@ -46,9 +47,10 @@ public class PetStore {
 			joinColumns = @JoinColumn(name = "pet_store_id"), // Foreign key column for PetStore in the join table
 			inverseJoinColumns = @JoinColumn(name = "customer_id") // Foreign key column for Customer in the join table
 	)
-	@EqualsAndHashCode.Exclude // Excludes this field from equals() and hashCode() methods to prevent infinite
-								// loops
+	// @formatter:off
+	@EqualsAndHashCode.Exclude // Excludes  field from equals() and hashCode() methods to prevent infinite loops
 	@ToString.Exclude // Excludes this field from the toString() method to avoid circular references
+	// @formatter:on
 	private Set<Customer> customers = new HashSet<>(); // Initializes the Set to prevent NullPointerException issues
 
 	@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -60,8 +62,10 @@ public class PetStore {
 	// true means if an Employee is removed from this set, it is deleted from the
 	// database.
 
-	@EqualsAndHashCode.Exclude // Excludes this field from equals() and hashCode() methods to prevent infinite
-								// loops
+	// @formatter:off
+	@EqualsAndHashCode.Exclude // Excludes this field from equals() and hashCode() methods to prevent infinite loops
 	@ToString.Exclude // Excludes this field from the toString() method to avoid circular references
+	// @formatter:on	
 	private Set<Employee> employees = new HashSet<>(); // Initializes the Set to prevent NullPointerException issues
+
 }
