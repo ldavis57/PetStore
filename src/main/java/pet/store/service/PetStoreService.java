@@ -111,7 +111,33 @@ public class PetStoreService {
 	    return new PetStoreCustomer(updatedCustomer);
 	}
 
-
+	@Transactional
+	public PetStoreEmployee updateUnassignedEmployee(Long employeeId, PetStoreEmployee petStoreEmployee) {
+	    if (petStoreEmployee == null) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee details cannot be null.");
+	    }
+	
+	    Employee employee = employeeDao.findById(employeeId)
+	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID=" + employeeId + " not found."));
+	
+	    // Validate required fields before updating
+	    if (petStoreEmployee.getEmployeeFirstName() == null || petStoreEmployee.getEmployeeFirstName().trim().isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee first name cannot be empty.");
+	    }
+	
+	    if (petStoreEmployee.getEmployeeLastName() == null || petStoreEmployee.getEmployeeLastName().trim().isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee last name cannot be empty.");
+	    }
+	
+	    // Update fields
+	    employee.setEmployeeFirstName(petStoreEmployee.getEmployeeFirstName());
+	    employee.setEmployeeLastName(petStoreEmployee.getEmployeeLastName());
+	    employee.setEmployeeJobTitle(petStoreEmployee.getEmployeeJobTitLe());
+	    employee.setEmployeePhone(petStoreEmployee.getEmployeePhone());
+	
+	    Employee updatedEmployee = employeeDao.save(employee);
+	    return new PetStoreEmployee(updatedEmployee);
+	}
 
 	/**
 	 * Finds an existing pet store by ID or creates a new instance if ID is null.
@@ -341,6 +367,20 @@ public class PetStoreService {
 	}
 
 	@Transactional
+	public void deleteEmployee(Long petStoreId, Long employeeId) {
+	    Employee employee = findEmployeeById(petStoreId, employeeId); // Ensure the employee exists
+	
+	    // Remove employee from the pet store’s employee list
+	    PetStore petStore = employee.getPetStore();
+	    if (petStore != null) {
+	        petStore.getEmployees().remove(employee);
+	    }
+	
+	    // Delete the employee from the database
+	    employeeDao.delete(employee);
+	}
+
+	@Transactional
 	public void deleteCustomer(Long petStoreId, Long customerId) {
 	    Customer customer = findCustomerById(petStoreId, customerId); // Ensure the customer exists
 	    
@@ -356,48 +396,6 @@ public class PetStoreService {
 	    customerDao.deleteById(customerId);
 	}
 	
-	@Transactional
-	public void deleteEmployee(Long petStoreId, Long employeeId) {
-	    Employee employee = findEmployeeById(petStoreId, employeeId); // Ensure the employee exists
-
-	    // Remove employee from the pet store’s employee list
-	    PetStore petStore = employee.getPetStore();
-	    if (petStore != null) {
-	        petStore.getEmployees().remove(employee);
-	    }
-
-	    // Delete the employee from the database
-	    employeeDao.delete(employee);
-	}
-
-
-	@Transactional
-	public PetStoreEmployee updateUnassignedEmployee(Long employeeId, PetStoreEmployee petStoreEmployee) {
-	    if (petStoreEmployee == null) {
-	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee details cannot be null.");
-	    }
-
-	    Employee employee = employeeDao.findById(employeeId)
-	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with ID=" + employeeId + " not found."));
-
-	    // Validate required fields before updating
-	    if (petStoreEmployee.getEmployeeFirstName() == null || petStoreEmployee.getEmployeeFirstName().trim().isEmpty()) {
-	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee first name cannot be empty.");
-	    }
-
-	    if (petStoreEmployee.getEmployeeLastName() == null || petStoreEmployee.getEmployeeLastName().trim().isEmpty()) {
-	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee last name cannot be empty.");
-	    }
-
-	    // Update fields
-	    employee.setEmployeeFirstName(petStoreEmployee.getEmployeeFirstName());
-	    employee.setEmployeeLastName(petStoreEmployee.getEmployeeLastName());
-	    employee.setEmployeeJobTitle(petStoreEmployee.getEmployeeJobTitLe());
-	    employee.setEmployeePhone(petStoreEmployee.getEmployeePhone());
-
-	    Employee updatedEmployee = employeeDao.save(employee);
-	    return new PetStoreEmployee(updatedEmployee);
-	}
 	@Transactional
 	public PetStoreEmployee assignEmployeeToStore(Long petStoreId, Long employeeId) {
 	    Employee employee = employeeDao.findById(employeeId)

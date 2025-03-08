@@ -38,6 +38,7 @@ public class PetStoreData {
 		petStoreName = petStore.getPetStoreName();
 		petStoreAddress = petStore.getPetStoreAddress();
 		petStoreCity = petStore.getPetStoreCity();
+		petStoreState = petStore.getPetStoreState();
 		petStoreZip = petStore.getPetStoreZip();
 		petStorePhone = petStore.getPetStorePhone();
 
