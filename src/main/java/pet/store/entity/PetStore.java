@@ -15,7 +15,6 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pet.store.controller.model.EmployeeData.PetStoreEmployee;
 
 /**
  * Represents a PetStore entity in the pet store system. This class is mapped to

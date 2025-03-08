@@ -1,8 +1,129 @@
+[
+  {
+    "petStoreId": 1,
+    "petStoreName": "Super Groovy Pet Store",
+    "petStoreAddress": "8395 North Bladford Lane",
+    "petStoreCity": "Gangrene",
+    "petStoreState": null,
+    "petStoreZip": "12345",
+    "petStorePhone": "303-322-4995",
+    "customers": [
+      {
+        "customerId": 1,
+        "customerFirstName": "Tony",
+        "customerLastName": "Baloney",
+        "customerEmail": "tony@noodellas.r.us"
+      }
+    ],
+    "employees": [
+      {
+        "employeeId": 4,
+        "employeeFirstName": "Adams",
+        "employeeLastName": "Burns",
+        "employeePhone": "517-420-6868",
+        "employeeJobTitLe": "Supervisor"
+      },
+      {
+        "employeeId": 3,
+        "employeeFirstName": "Felicia",
+        "employeeLastName": "Day",
+        "employeePhone": "517-420-9964",
+        "employeeJobTitLe": "Veterinarian Assistant"
+      }
+    ]
+  },
+  {
+    "petStoreId": 2,
+    "petStoreName": "Raining Cats & Dogs Pet Store",
+    "petStoreAddress": "6823 Oliver Ave S",
+    "petStoreCity": "Minneapolis",
+    "petStoreState": null,
+    "petStoreZip": "55412",
+    "petStorePhone": "612-654-2942",
+    "customers": [
+      {
+        "customerId": 2,
+        "customerFirstName": "Mary",
+        "customerLastName": "Hartman",
+        "customerEmail": "mhmaryhartman@gmail.com"
+      },
+      {
+        "customerId": 3,
+        "customerFirstName": "Phil",
+        "customerLastName": "Hartmen",
+        "customerEmail": "phartmen@gmail.com"
+      }
+    ],
+    "employees": []
+  },
+  {
+    "petStoreId": 3,
+    "petStoreName": "Smith Sisters Pet Store",
+    "petStoreAddress": "413 East Grand River Ave",
+    "petStoreCity": "Williamston",
+    "petStoreState": null,
+    "petStoreZip": "48895",
+    "petStorePhone": "517-654-2683",
+    "customers": [],
+    "employees": []
+  },
+  {
+    "petStoreId": 4,
+    "petStoreName": "Count Dracula's Exotic Pet Store",
+    "petStoreAddress": "1313 Mockingbird Lane",
+    "petStoreCity": "Hell",
+    "petStoreState": null,
+    "petStoreZip": "48169",
+    "petStorePhone": "734-654-2683",
+    "customers": [],
+    "employees": []
+  },
+  {
+    "petStoreId": 5,
+    "petStoreName": "Oodles of Poodles Pet Store",
+    "petStoreAddress": "6450 Hilltop Lane",
+    "petStoreCity": "Podunk",
+    "petStoreState": null,
+    "petStoreZip": "52809",
+    "petStorePhone": "712-298-8623",
+    "customers": [],
+    "employees": [
+      {
+        "employeeId": 1,
+        "employeeFirstName": "Jenny",
+        "employeeLastName": "Mohoney",
+        "employeePhone": "679-867-5309",
+        "employeeJobTitLe": "Veterinarian"
+      }
+    ]
+  },
+  {
+    "petStoreId": 6,
+    "petStoreName": "Happy Paws",
+    "petStoreAddress": "123 Pet Lane",
+    "petStoreCity": "New York",
+    "petStoreState": null,
+    "petStoreZip": "10001",
+    "petStorePhone": "679-555-6789",
+    "customers": [],
+    "employees": [
+      {
+        "employeeId": 2,
+        "employeeFirstName": "Katie",
+        "employeeLastName": "Burns",
+        "employeePhone": "302-634-5789",
+        "employeeJobTitLe": "Manager"
+      }
+    ]
+  }
+]
+
 {
-  "petStoreName": "Really Cool Pet Store",
-  "petStoreAddress": "24 Peg Shop Lane",
-  "petStoreCity": "Reno",
-  "petStoreState": "Nevada",
-  "petStoreZip": "89523",
-  "petStorePhone": "775-204-2496"
-}
+    "petStoreName": "Dudley Animal Hospital",
+    "petStoreAddress": "600 Doorite Blvd.",
+    "petStoreCity": "Toronto",
+    "petStoreState": "Ontario",
+    "petStoreZip": ""M5V 3L9"",
+    "petStorePhone": "778-523-4219"
+
+    
