@@ -6,7 +6,12 @@
   
   <p>
     Showcasing Java, MySQL, Maven, JPA, Spring Boot, and Lombok
-    with elegant error handling.
+    with elegant error handling. 
+  </p>
+    
+  <p>
+    Demonstrates all CRUD operations
+    and elegant error handling.
   </p>
   
 </div>
